@@ -7,6 +7,8 @@ assignees: ''
 
 ---
 
+## Title
+
 **As:**
 
 **I want to:**
@@ -15,8 +17,6 @@ assignees: ''
 **In order to:**
 
 **Description:**
-
----
 
 ## Acceptance Criteria
 
