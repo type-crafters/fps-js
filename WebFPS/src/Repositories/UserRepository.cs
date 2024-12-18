@@ -5,14 +5,9 @@ using WebFPS.src.Util;
 
 namespace WebFPS.src.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository(MongoDbContext context) : IUserRepository
 {
-    private readonly IMongoCollection<UserEntity> _users;
-
-    public UserRepository(MongoDbContext context)
-    {
-        _users = context.GetCollection<UserEntity>("users");
-    }
+    private readonly IMongoCollection<UserEntity> _users = context.GetCollection<UserEntity>("users");
 
     public async Task<bool> InsertOne(UserEntity user)
     {
@@ -87,5 +82,10 @@ public class UserRepository : IUserRepository
         FilterDefinition<UserEntity> filter = Builders<UserEntity>.Filter.Eq(user => user.Id, _id);
         DeleteResult result = await _users.DeleteOneAsync(filter);
         return result.DeletedCount  > 0;
+    }
+
+    public Task<UserPreferenceEntity> FindUserPreference(string _id)
+    {
+        throw new NotImplementedException();
     }
 }

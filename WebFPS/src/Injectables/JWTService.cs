@@ -1,7 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using WebFPS.src.Services;
 
@@ -117,5 +116,15 @@ public class JWTService : IJWTService
             Console.WriteLine(exception.Message);
             return false;
         }
+    }
+
+    public string GetClaim(string token, string claimType)
+    {
+        JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+        JwtSecurityToken jwt = handler.ReadJwtToken(token);
+
+        string? claim = jwt.Claims.FirstOrDefault(claim => claim.Type == claimType)?.Value;
+        
+        return claim ?? "";
     }
 }

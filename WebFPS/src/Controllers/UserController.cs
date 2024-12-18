@@ -1,5 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using WebFPS.src.Entities;
 using WebFPS.src.RequestModels;
@@ -9,19 +10,11 @@ namespace WebFPS.src.Controllers;
 
 [ApiController]
 [Route("/api/users")]
-public class UserController : ControllerBase
+public class UserController(IUserRepository userRepo, IPasswordService passwordService, IJWTService jwtService) : ControllerBase
 {
-    private readonly IUserRepository _userRepo;
-    private readonly IPasswordService _passwordService;
-    private readonly IJWTService _jwtService;
-
-    public UserController(IUserRepository userRepo, IPasswordService passwordService, IJWTService jwtService)
-    {
-        _userRepo = userRepo;
-        _passwordService = passwordService;
-        _jwtService = jwtService;
-    }
-
+    private readonly IUserRepository _userRepo = userRepo;
+    private readonly IPasswordService _passwordService = passwordService;
+    private readonly IJWTService _jwtService = jwtService;
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromForm] LoginRequest request)
@@ -125,5 +118,18 @@ public class UserController : ControllerBase
 
         return result ? Ok("User created successfully") : Problem("There was a problem creating the user in the database.", statusCode: 500);
 
+    }
+    [Authorize]
+    [HttpGet("{id}/preferences")]
+    public async Task<IActionResult> GetUserPreferences(string id) {
+        string token = Request.Headers.Authorization.ToString().Split(" ")[1];
+        string tokenId = _jwtService.GetClaim(token, ClaimTypes.NameIdentifier);
+
+        if(id != tokenId) {
+            return Forbid("Requesting incorrect user information.");
+        }
+
+        await _userRepo.FindOne(_id: ""); // csharp-lint-disable:CS1998
+        return Ok(); // csharp-lint-disable:CS0161
     }
 }
