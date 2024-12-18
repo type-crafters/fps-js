@@ -1,3 +1,4 @@
+using MongoDB.Bson;
 using MongoDB.Driver;
 using WebFPS.src.Entities;
 using WebFPS.src.Services;
@@ -8,12 +9,14 @@ namespace WebFPS.src.Repositories;
 public class UserRepository(MongoDbContext context) : IUserRepository
 {
     private readonly IMongoCollection<UserEntity> _users = context.GetCollection<UserEntity>("users");
-
+    private readonly IMongoCollection<UserPreferenceEntity> _preferences = context.GetCollection<UserPreferenceEntity>("user_preferences");
     public async Task<bool> InsertOne(UserEntity user)
     {
         try
         {
+            user.Id = ObjectId.GenerateNewId().ToString();
             await _users.InsertOneAsync(user);
+            await _preferences.InsertOneAsync(new UserPreferenceEntity(user.Id));
             return true;
         }
         catch (Exception exception)
@@ -27,7 +30,13 @@ public class UserRepository(MongoDbContext context) : IUserRepository
     {
         try
         {
+            List<UserPreferenceEntity> preferences = [];
+            users.ForEach((user) => {
+                user.Id = ObjectId.GenerateNewId().ToString();
+                preferences.Add(new UserPreferenceEntity(user.Id));
+            });
             await _users.InsertManyAsync(users);
+            await _preferences.InsertManyAsync(preferences);
             return true;
         }
         catch (Exception exception)
@@ -59,7 +68,7 @@ public class UserRepository(MongoDbContext context) : IUserRepository
         FilterDefinition<UserEntity> filter = Builders<UserEntity>.Filter.Eq(user => user.Email, email);
         return await _users.Find(filter).FirstOrDefaultAsync();
     }
-    
+
     public async Task<bool> UpdateOne(string _id, UserEntity user)
     {
         FilterDefinition<UserEntity> filter = Builders<UserEntity>.Filter.Eq(user => user.Id, _id);
@@ -81,11 +90,6 @@ public class UserRepository(MongoDbContext context) : IUserRepository
     {
         FilterDefinition<UserEntity> filter = Builders<UserEntity>.Filter.Eq(user => user.Id, _id);
         DeleteResult result = await _users.DeleteOneAsync(filter);
-        return result.DeletedCount  > 0;
-    }
-
-    public Task<UserPreferenceEntity> FindUserPreference(string _id)
-    {
-        throw new NotImplementedException();
+        return result.DeletedCount > 0;
     }
 }
