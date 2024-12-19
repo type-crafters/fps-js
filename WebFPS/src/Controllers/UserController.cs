@@ -5,11 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using WebFPS.src.Entities;
 using WebFPS.src.RequestModels;
 using WebFPS.src.Services;
+using WebFPS.src.ResponseModels;
 
 namespace WebFPS.src.Controllers;
 
 [ApiController]
-[Route("/api/users")]
+[Route("api/users")]
 public class UserController(IUserRepository userRepo, IPasswordService passwordService, IJWTService jwtService) : ControllerBase
 {
     private readonly IUserRepository _userRepo = userRepo;
@@ -17,7 +18,7 @@ public class UserController(IUserRepository userRepo, IPasswordService passwordS
     private readonly IJWTService _jwtService = jwtService;
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromForm] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         if (string.IsNullOrEmpty(request.Email?.Trim().ToLower()))
         {
@@ -46,7 +47,25 @@ public class UserController(IUserRepository userRepo, IPasswordService passwordS
             string accessToken = _jwtService.SignToken(user.Id!.ToString(), user.Email);
             string refreshToken = _jwtService.SignRefreshToken(user.Id!.ToString());
 
-            return Ok(new {accessToken, refreshToken});
+            LoginResponse userResponse = new(id: user.Id, email: user.Email, userName: user.UserName);
+
+            Response.Cookies.Append("accessToken", accessToken, new CookieOptions
+            {
+                HttpOnly = true,
+                // Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddHours(1)
+            });
+
+            Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                // Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(30)
+            });
+
+            return Ok(userResponse);
         }
         catch (Exception exception)
         {
@@ -56,7 +75,7 @@ public class UserController(IUserRepository userRepo, IPasswordService passwordS
     }
 
     [HttpPost("signup")]
-    public async Task<IActionResult> Signup([FromForm] SignupRequest request)
+    public async Task<IActionResult> Signup([FromBody] SignupRequest request)
     {
         Regex emailPattern = new(@"^[\w.+-]+@[\w.-]+\.[a-zA-Z]{2,}$");
         Regex usernamePattern = new(@"^[A-Za-z_]{1}[\w]{7,30}$");
@@ -121,11 +140,13 @@ public class UserController(IUserRepository userRepo, IPasswordService passwordS
     }
     [Authorize]
     [HttpGet("{id}/preferences")]
-    public async Task<IActionResult> GetUserPreferences(string id) {
+    public async Task<IActionResult> GetUserPreferences(string id)
+    {
         string token = Request.Headers.Authorization.ToString().Split(" ")[1];
         string tokenId = _jwtService.GetClaim(token, ClaimTypes.NameIdentifier);
 
-        if(id != tokenId) {
+        if (id != tokenId)
+        {
             return Forbid("Requesting incorrect user information.");
         }
 
