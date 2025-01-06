@@ -1,4 +1,4 @@
-import { InputListener } from "./InputListener";
+import { InputListener } from ".";
 
 interface LightDarkIcons {
     light: string;
@@ -16,6 +16,6 @@ export class InputBinding {
         this.code = code;
         this.icons = icons;
         this.listener = listener;
-
     }
 }
+
