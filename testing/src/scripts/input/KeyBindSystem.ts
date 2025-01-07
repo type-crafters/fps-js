@@ -1,4 +1,4 @@
-import { ActionMap, InputBinding, InputListener } from ".";
+import { IActionMap, InputBinding, InputListener } from ".";
 
 export class KeyBindSystem {
     public static readonly bindings: Map<string, InputBinding> = new Map([
@@ -109,7 +109,21 @@ export class KeyBindSystem {
         [InputBinding.MouseWheelDown, new InputBinding(InputBinding.MouseWheelDown, { light: "/Icons/1.1/Light/MouseWheelDown.svg", dark: "/Icons/1.1/Dark/MouseWheelDown.svg" },  InputListener.Wheel)],
     ]);
 
-    public static readonly defaults: ActionMap<InputBinding> = {
+    public getLocalUserKeybinds(): IActionMap<InputBinding> {
+        const keybindJson = localStorage.getItem("keybinds");
+        if (keybindJson) {
+            const keybinds = JSON.parse(keybindJson);
+            return keybinds as IActionMap<InputBinding>; // TODO build adapter
+        } else {
+            return KeyBindSystem.defaults;
+        }
+    }
+
+    public getStoredUserKeybinds(): IActionMap<InputBinding> {
+        return {} as IActionMap<InputBinding>;
+    }
+
+    public static readonly defaults: IActionMap<InputBinding> = {
         MoveForward: this.bindings.get("KeyW")!,
         MoveBackward: this.bindings.get("KeyS")!,
         MoveLeft: this.bindings.get("KeyA")!,
@@ -129,7 +143,7 @@ export class KeyBindSystem {
         TacticalEquipment: this.bindings.get("KeyQ")!
     }
 
-    public static getDefaultBinding(action: keyof ActionMap<InputBinding>): InputBinding {
+    public static getDefaultBinding(action: keyof IActionMap<InputBinding>): InputBinding {
         return KeyBindSystem.defaults[action];
     }
 }

@@ -1,7 +1,8 @@
-<svg width="76" height="72" viewBox="0 0 76 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="76" height="72" rx="8" fill="#171717"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M52 20H24V52H52V20ZM49.3333 22.6667H26.6667V49.3333H49.3333V22.6667Z" fill="white"/>
-<path d="M30.6667 34.6667H45.3333V37.3333H30.6667V34.6667Z" fill="white"/>
-<path d="M30.6667 26.6667H45.3333V29.3333H30.6667V26.6667Z" fill="white"/>
-<path d="M30.6667 42.6667H45.3333V45.3333H30.6667V42.6667Z" fill="white"/>
+<svg width="80" height="76" viewBox="0 0 80 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="1" y="1" width="78" height="74" rx="9" fill="#171717"/>
+<rect x="1" y="1" width="78" height="74" rx="9" stroke="white" stroke-width="2"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M54 22H26V54H54V22ZM51.3333 24.6667H28.6667V51.3333H51.3333V24.6667Z" fill="white"/>
+<path d="M32.6667 36.6667H47.3333V39.3333H32.6667V36.6667Z" fill="white"/>
+<path d="M32.6667 28.6667H47.3333V31.3333H32.6667V28.6667Z" fill="white"/>
+<path d="M32.6667 44.6667H47.3333V47.3333H32.6667V44.6667Z" fill="white"/>
 </svg>

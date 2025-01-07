@@ -1,4 +1,4 @@
-export interface ActionMap<T> {
+export interface IActionMap<T> {
     MoveForward: T;
     MoveBackward: T;
     MoveLeft: T;

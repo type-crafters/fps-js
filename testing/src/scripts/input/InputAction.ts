@@ -1,4 +1,4 @@
-import { InputBinding, InputListener, InputPhase } from ".";
+import { InputBinding, InputListener } from ".";
 import { ActionDisabledError } from "../error";
 
 export class InputAction {
@@ -40,7 +40,7 @@ export class InputAction {
     }
 
     private onKeyDown(event: KeyboardEvent): void {
-        if (!this._enabled) {
+        if (!this.isEnabled()) {
             throw new ActionDisabledError(`Action '${this.constructor.name}' was not explicitly enabled before use.`);
         }
         if (this._binding.listener !== InputListener.Keyboard || event.code !== this._binding.code) {
@@ -52,7 +52,7 @@ export class InputAction {
     }
 
     private onKeyUp(event: KeyboardEvent): void {
-        if (!this._enabled) {
+        if (!this.isEnabled()) {
             throw new ActionDisabledError(`Action '${this.constructor.name}' was not explicitly enabled before use.`);
         }
         if (this._binding.listener !== InputListener.Keyboard || this._binding.code !== event.code) {
@@ -63,7 +63,7 @@ export class InputAction {
     }
 
     private onMouseDown(event: MouseEvent): void {
-        if (!this._enabled) {
+        if (!this.isEnabled()) {
             throw new ActionDisabledError(`Action '${this.constructor.name}' was not explicitly enabled before use.`);
         }
         if (this._binding.listener !== InputListener.Mouse || this._binding.code !== String(event.button)) {
@@ -75,7 +75,7 @@ export class InputAction {
     }
 
     private onMouseUp(event: MouseEvent): void {
-        if (!this._enabled) {
+        if (!this.isEnabled()) {
             throw new ActionDisabledError(`Action '${this.constructor.name}' was not explicitly enabled before use.`);
         }
         if (this._binding.listener !== InputListener.Mouse || this._binding.code !== String(event.button)) {
@@ -85,14 +85,31 @@ export class InputAction {
         this.goToRelease();
     }
     private onWheel(event: WheelEvent): void {
-        void event; // remove
-        if(!this._enabled) {
+        if(!this.isEnabled()) {
             throw new ActionDisabledError(`Action '${this.constructor.name}' was not explicitly enabled before use.`);
         }
-        if(this._binding.listener !== InputListener.Wheel) {
+        if(this._binding.listener !== InputListener.Wheel || event.deltaY == 0) {
             return;
         }
-
+        switch(this._binding.code) {
+            case InputBinding.MouseWheelDown:
+                if(event.deltaY > 0) {
+                    this.goToPress();
+                    this.goToHold();
+                }
+                else {
+                    this.goToRelease();
+                }
+                break;
+            case InputBinding.MouseWheelUp:
+                if(event.deltaY < 0) {
+                    this.goToPress();
+                    this.goToHold();
+                } else {
+                    this.goToRelease();
+                }
+                break;
+        }
     }
 
     private goToPress(): void {
@@ -136,7 +153,7 @@ export class InputAction {
     }
 
     public onAnimationFrame(): void {
-        if (this._enabled) {
+        if (this.isEnabled()) {
             this._current.trigger();
             if (this._current == this.release) {
                 this.unset();
@@ -144,5 +161,40 @@ export class InputAction {
         } else {
             throw new ActionDisabledError(`Action '${this.constructor.name}' was not explicitly enabled before use.`);
         }
+    }
+}
+
+class InputPhase {
+    private _callstack: Set<() => void> = new Set();
+
+    public static nil: InputPhase = new InputPhase();
+
+    private isNil(): boolean {
+        return InputPhase.nil == this;
+    }
+
+    public subscribe(handler: () => void): void {
+        if (this.isNil()) {
+            return;
+        }
+        this._callstack.add(handler);
+    }
+
+    public unsubscribe(handler: () => void): void {
+        if (this.isNil()) {
+            return;
+        }
+        if (this._callstack.has(handler)) {
+            this._callstack.delete(handler);
+        }
+    }
+
+    public trigger(): void {
+        if (this.isNil()) {
+            return;
+        }
+        this._callstack.forEach((handler) => {
+            handler();
+        })
     }
 }

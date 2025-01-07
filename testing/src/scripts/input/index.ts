@@ -1,4 +1,4 @@
-export * from "./ActionMap";
+export * from "./IActionMap";
 export * from "./InputAction";
 export * from "./InputBinding";
 export * from "./InputListener";
