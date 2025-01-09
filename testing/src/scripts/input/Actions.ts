@@ -1,0 +1,19 @@
+export enum Actions {
+    MoveForward,
+    MoveBackward,
+    MoveLeft,
+    MoveRight,
+    Sprint,
+    Crouch,
+    Prone,
+    Fire,
+    ADS,
+    NextWeapon,
+    PreviousWeapon,
+    LethalEquipment,
+    TacticalEquipment,
+    Melee,
+    Interact,
+    Menu,
+    Accept
+}
