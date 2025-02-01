@@ -1,20 +1,27 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-
 import path from "path";
-import { fileURLToPath } from "url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
     plugins: [react()],
     resolve: {
-        alias: [
-            { find: "@", replacement: path.resolve(__dirname, "./src") },
-            { find: "@ui", replacement: path.resolve(__dirname, "./src/ui") },
-            { find: "@scripts", replacement: path.resolve(__dirname, "./src/scripts") },
+        alias: {
+            "@": path.resolve(__dirname, "./src"),
+            "@ui": path.resolve(__dirname, "./src/ui"),
+            "@styles": path.resolve(__dirname, "./src/ui/styles"),
+            "@scripts": path.resolve(__dirname, "./src/scripts")
+        }
+    },
+    esbuild: {
+        loader: "jsx",
+        include: [
+            "src/**/*.js",
+            "src/**/*.jsx",
+            "node_modules/**/*.jsx",
+            "node_modules/**/*.tsx",
+        ],
+        exclude: [
+            "src/scripts/**/*.js"
         ]
     }
 });
-
-

@@ -1,10 +1,6 @@
-import { InputListener } from "./InputListener";
+import { InputListener } from "@scripts/InputListener";
+import SystemBase from "../SystemBase";
 
-export class InputSystem {
-    // eslint-disable-next-line no-unused-private-class-members
+export class InputSystem extends SystemBase {
     #listener;
-
-    constructor() {
-        this.#listener = new InputListener();
-    }
 }
