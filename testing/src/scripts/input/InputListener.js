@@ -34,27 +34,19 @@ export class InputListener extends SystemBase {
     }
 
     onKeyDown = (event) => {
-        const code = event.code;
-        if (!this.#keyboard.has(code)) {
-            this.#keyboard.set(code, { press: true, hold: false, release: false });
-        }
+        this.#keyboard.set(event.code, { press: true, hold: false, release: false });
     }
 
     onKeyUp = (event) => {
-        const code = event.code;
-        this.#keyboard.set(code, { press: false, hold: false, release: true })
+        this.#keyboard.set(event.code, { press: false, hold: false, release: true })
     }
 
     onMouseDown = (event) => {
-        const button = event.button;
-        if (!this.#mouse.has(button)) {
-            this.#mouse.set(button, { press: true, hold: false, release: false });
-        }
+        this.#mouse.set(event.button, { press: true, hold: false, release: false });
     }
 
     onMouseUp = (event) => {
-        const button = event.button;
-        this.#mouse.set(button, { press: false, hold: false, release: true })
+        this.#mouse.set(event.button, { press: false, hold: false, release: true })
     }
 
     onWheel = (event) => {
@@ -88,9 +80,9 @@ export class InputListener extends SystemBase {
 
     isReleased(code) {
         if (code === InputListener.WHEEL_DOWN) {
-            return this.#wheel !== InputListener.WHEEL_DOWN;
+            return this.#wheel === InputListener.WHEEL_REST;
         } else if (code === InputListener.WHEEL_UP) {
-            return this.#wheel !== InputListener.WHEEL_UP;
+            return this.#wheel === InputListener.WHEEL_REST;
         } else if (typeof code === "string") {
             return this.#keyboard.get(code)?.release || false;
         } else if (typeof code === "number") {

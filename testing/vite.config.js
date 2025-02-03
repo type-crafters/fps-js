@@ -9,7 +9,8 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
             "@ui": path.resolve(__dirname, "./src/ui"),
             "@styles": path.resolve(__dirname, "./src/ui/styles"),
-            "@scripts": path.resolve(__dirname, "./src/scripts")
+            "@scripts": path.resolve(__dirname, "./src/scripts"),
+            "@lib": path.resolve(__dirname, "./src/scripts/lib")
         }
     },
     esbuild: {
