@@ -1,6 +1,6 @@
 import SystemBase from "@scripts/SystemBase";
 
-export class InputListener extends SystemBase {
+export default class InputListener extends SystemBase {
     static WHEEL_DOWN = "down";
     static WHEEL_UP = "up";
     static WHEEL_REST = "rest";

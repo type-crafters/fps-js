@@ -1,8 +1,6 @@
-import { ActionManager } from "./ActionManager";
-import { InputContext } from "./InputContext";
-import { InputListener } from "./InputListener";
-import { InputObserver } from "./InputObserver";
-import { InputSystem } from "./InputSystem";
-import { KeyBindSystem } from "./KeyBindSystem";
-
-export { ActionManager, InputContext, InputListener, InputObserver, InputSystem, KeyBindSystem }
+export { default as ActionManager } from "./ActionManager";
+export { default as ActionMap } from "./ActionMap";
+export { default as InputContext } from "./InputContext";
+export { default as InputListener } from "./InputListener";
+export { default as InputObserver } from "./InputObserver";
+export { default as InputSystem } from "./InputSystem";

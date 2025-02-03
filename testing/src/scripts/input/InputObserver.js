@@ -1,7 +1,7 @@
-import { inferType } from "../lib/index";
+import { inferType } from "../../lib/index";
 
 
-export class InputObserver {
+export default class InputObserver {
     static nil = new InputObserver();
     #callstack;
 

@@ -8,7 +8,8 @@
             "@ui/*": ["src/ui/*"],
             "@styles/*": ["src/styles/*"],
             "@scripts/*": ["src/scripts/*"],
-            "@lib/*": ["src/scripts/lib/*"]
+            "@lib/*": ["src/lib/*"],
+            "@error/*": ["src/error/*"]
         },
     },
     "include": ["src/**/*"],

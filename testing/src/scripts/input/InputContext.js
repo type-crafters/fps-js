@@ -1,6 +1,6 @@
 import { InputObserver } from "./InputObserver";
 
-export class InputContext {
+export default class InputContext {
     static WHEEL_DOWN = "down";
     static WHEEL_UP = "up";
     binding;
