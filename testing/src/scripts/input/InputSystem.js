@@ -1,13 +1,11 @@
-import { InputListener, ActionMap } from "@scripts/input/index";
-import path from "path";
-export default class InputSystem {
+import { InputListener, ActionMap, ActionContext, InputContext } from "@scripts/input/index";
+import SystemBase from "@scripts/SystemBase";
+export default class InputSystem extends SystemBase {
     /* TODO add implementation */
-    isLoggedIn() {
-        return false;
-    }
+    isLoggedIn = () => false;
+
     static WHEEL_UP = "wheel up";
     static WHEEL_DOWN = "wheel down";
-    listener;
 
     #defaultBindings = new ActionMap({
         moveForward: "KeyW",
@@ -31,9 +29,21 @@ export default class InputSystem {
         accept: "Enter"
     });
 
+    actions;
+    listener;
+
     constructor() {
         super();
         this.listener = new InputListener();
+
+        /* TODO retrieve user bindings from source */
+
+        this.actions = new ActionMap(Object.fromEntries(
+            Object.entries(this.#defaultBindings).map(([key, value]) => {
+                [key, new ActionContext(value)]
+            })
+        ));
+        this.onInitialize();
     }
 
     getDefaultBindings() {
@@ -42,9 +52,35 @@ export default class InputSystem {
 
     storeDefaultBindings() {
         if(this.isLoggedIn()) {
-            throw new Error("Method not implemented");
+            console.warn("Store in Database through endpoint!");
         } else {
-            throw new Error("Method not implemented");
+            console.warn("Store in LocalStorage using key!");
+        }
+    }
+    
+    onInitialize() {
+        for(const context of Object.values(this.actions)) {
+            context.enable();
+        }
+    }
+    
+    onAnimationFrame() {
+        for(const context of Object.values(this.actions)) {
+            if(this.listener.isPressed(context.getBinding())) {
+                context.setCurrent(InputContext.PRESS);
+            } else if(this.listener.isHeld(context.getBinding())) {
+                context.setCurrent(InputContext.HOLD)
+            } else if(this.listener.isReleased(context.getBinding())) {
+                context.setCurrent(InputContext.RELEASE);
+            } else {
+                context.setCurrent(InputContext.INACTIVE);
+            }
+        }
+    }
+
+    onCleanup() {
+        for(const context of Object.values(this.actions)) {
+            context.disable();
         }
     }
 }

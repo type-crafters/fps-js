@@ -1,5 +1,4 @@
-import { inferType } from "../../lib/index";
-
+import { inferType } from "@lib/index";
 
 export default class InputObserver {
     static nil = new InputObserver();
@@ -31,6 +30,7 @@ export default class InputObserver {
             if (!callbackfn.name) {
                 throw new Error("Only named functions can be deleted from the InputObserver class.");
             }
+            this.#callstack.delete(callbackfn.name);
         }
     }
 

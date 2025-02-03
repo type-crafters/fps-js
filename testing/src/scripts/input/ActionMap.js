@@ -1,5 +1,5 @@
-import AdapterError from "@/error/AdapterError";
-import { inferType } from "../../lib/index";
+import AdapterError from "@error/AdapterError";
+import { inferType } from "@lib/index";
 
 export default class ActionMap {
     moveForward;
