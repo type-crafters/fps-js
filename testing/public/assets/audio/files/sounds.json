@@ -1,0 +1,20 @@
+{
+    "sounds": {
+        "menu_scroll": {
+            "sources": ["/menu/scroll-selection-sound.mp3", "/menu/scroll-selection-sound.wav"],
+            "options": { 
+                "volume": 0.8,
+                "loop": true,
+                "autoplay": false
+            }  
+        },
+        "reload": {
+            "sources": ["/game/weapon-loading.mp3", "/game/weapon-loading.wav"],
+            "options": { 
+                "volume": 0.8,
+                "loop": true,
+                "autoplay": false
+            }  
+        }
+    }
+}
