@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import {Music} from "./ui/App";
 import App from "./ui/App";
 import "@styles/globals.css";
 
@@ -24,6 +25,7 @@ animate();
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
+        <Music />
         <App />
     </StrictMode>
 );

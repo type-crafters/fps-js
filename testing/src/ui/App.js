@@ -1,64 +1,7 @@
 import { SoundManager } from "@/scripts/sound/index";
 import { useState, useEffect, useRef } from "react";
 
-// export default function App() {
-
-//     const sound = useRef(new SoundManager()); // Se crea solo una vez
-//     sound.loadSoundConfig();
-//     const [volume, setVol] = useState(1.0);
-
-//     const increaseVolume = () => {
-//         setVol(prevVolume => {
-//             const newVolume = Math.min(prevVolume + 0.1, 4.0); // Limita a 1.0
-//             sound.current.setVolume('song', newVolume);
-//             //return newVolume;
-//         });
-//     };
-
-//     // useEffect(() => {
-//     // // Cargar la configuración de sonidos al montar el componente
-//     //     sound.loadSoundConfig();
-//     // }, []);
-    
-//     // const Play = () => {
-//     //     sound.play('menu_scroll');
-//     // };
-
-//     return(
-//         <div style={{
-//             width: "100vw",
-//             height: "100vh",
-//             backgroundColor: "#262626",
-//             color: "white",
-//             display: "flex",
-//             justifyContent: "center",
-//             alignItems: "center",
-//             fontSize: "3rem",
-//             fontWeight: "500"
-//         }}>
-//             <button onClick={() => sound.play('song')}>
-//                 Play
-//             </button>
-//             <button onClick={() => sound.pause('song')}>
-//                 Pause
-//             </button>
-//             <button onClick={() => sound.stop('song')}>
-//                 Stop
-//             </button>
-//             <button onClick={() => sound.mute('song')}>
-//                 Mute
-//             </button>
-//             <button onClick={increaseVolume}>
-//                 Volume
-//             </button>
-//             <button onClick={() => sound.rate('song', 2.0)}>
-//                 Rate
-//             </button>
-//         </div>
-//     );
-// }
-
-export default function App() {
+export function Music() {
     const [volume, setVolume] = useState(0.1);
     const [isMuted, setIsMuted] = useState(false);
     const [rate, setRate] = useState(0.5);
