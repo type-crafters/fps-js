@@ -1,14 +1,4 @@
 import { Howl } from "howler";
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import path from 'path';
-
-console.log(path.join("@assets", 'audio'))
-// Get the absolute path
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const folderPath = new URL(import.meta.url).pathname;
-console.log(folderPath)
 
 /**
  * SoundManager Class - Manages sound loading and playback using Howler.js
@@ -16,19 +6,18 @@ console.log(folderPath)
  */
 export class SoundManager {
     // Private static fields
-    static #instance = null;
+    static instance = null; 
     static #sounds = new Map();
     static #basePath = `/assets/audio`;
-    //static folderPath = path.join(__dirname, '../../', 'assets', 'audio');
 
     /**
      * Constructor - Singleton Pattern
      */
     constructor() {
-        if (!SoundManager.#instance) {
-            SoundManager.#instance = this;
+        if (SoundManager.instance) {
+            return SoundManager.instance;
         }
-        return SoundManager.#instance;
+        SoundManager.instance = this; 
     }
 
     /**
@@ -115,6 +104,10 @@ export class SoundManager {
             console.warn(`🔊 No sound loaded for key "${key}"`);
             return null;
         }
+        if (this.isPlaying(key, id)) {
+            console.warn(`🔊 The sound ${key} is already playing`);
+            return null;
+        }
         return sound.play(id);
     }
 
@@ -159,7 +152,7 @@ export class SoundManager {
      */
     setVolume(key, volume, id) {
         const sound = SoundManager.#sounds.get(key);
-        if (sound) sound.mute(volume, id);
+        if (sound) sound.volume(volume, id);
     }
 
     /**

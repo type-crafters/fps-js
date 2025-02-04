@@ -4,7 +4,7 @@
             "sources": ["/menu/scroll-selection-sound.mp3", "/menu/scroll-selection-sound.wav"],
             "options": { 
                 "volume": 0.8,
-                "loop": true,
+                "loop": false,
                 "autoplay": false
             }  
         },
@@ -15,6 +15,13 @@
                 "loop": true,
                 "autoplay": false
             }  
+        },
+        "song": {
+            "sources": ["/menu/song.mp3"],
+            "options": {
+                "volume": 0.1,
+                "rate": 1.0
+            }
         }
     }
 }
