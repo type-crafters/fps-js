@@ -41,16 +41,7 @@ export default class InputContext {
     setBinding(binding) {
         this.binding = binding;
     }
-
-    getCurrent = () => {
-        switch(this.#current) {
-            case this.press: return InputContext.PRESS;
-            case this.hold: return InputContext.HOLD;
-            case this.release: return InputContext.RELEASE;
-            case InputObserver.nil: return InputContext.INACTIVE;
-        }
-    } // TODO remove
-
+    
     setCurrent(observer) {
         switch (observer) {
             case InputContext.PRESS:
