@@ -3,7 +3,7 @@ export default class SystemBase {
         "onInitialize",
         "onAnimationFrame",
         "onCleanup"
-    ]
+    ];
 
     constructor() {
         if (new.target === SystemBase) {
@@ -14,6 +14,6 @@ export default class SystemBase {
             if (typeof this[method] !== "function") {
                 throw new Error(`Class '${this.constructor.name}' must implement abstract member '${method}'.`);
             }
-        })
+        });
     }
 }
