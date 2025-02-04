@@ -11,11 +11,10 @@ export default defineConfig({
             "@styles": path.resolve(__dirname, "./src/ui/styles"),
             "@scripts": path.resolve(__dirname, "./src/scripts"),
             "@lib": path.resolve(__dirname, "./src/lib"),
-            "@error": path.resolve(__dirname, "/src/error")
+            "@error": path.resolve(__dirname, "./src/error")
         }
     },
     esbuild: {
-        loader: "jsx",
         include: [
             "src/**/*.js",
             "src/**/*.jsx",
@@ -24,6 +23,7 @@ export default defineConfig({
         ],
         exclude: [
             "src/scripts/**/*.js"
-        ]
+        ],
+        loader: "jsx",
     }
 });

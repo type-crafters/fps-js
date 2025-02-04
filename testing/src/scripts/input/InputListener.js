@@ -20,35 +20,64 @@ export default class InputListener extends SystemBase {
             if (value["press"]) {
                 map.set(key, { press: false, hold: true, release: false });
             } else if (value["release"]) {
-                map.set(key, { press: false, hold: false, release: false })
+                map.set(key, { press: false, hold: false, release: false });
             }
         });
+
         this.#mouse.forEach((value, key, map) => {
-            if (value["press"]) {
+            if (value["press"])  {
                 map.set(key, { press: false, hold: true, release: false });
             } else if (value["release"]) {
-                map.set(key, { press: false, hold: false, release: false })
+                map.set(key, { press: false, hold: false, release: false });
             }
         });
+
         this.#wheel = InputListener.WHEEL_REST;
     }
 
+    /**
+     * @param {KeyboardEvent} event 
+     */
     onKeyDown = (event) => {
+        if (this.#keyboard.has(event.code)) {
+            if(this.#keyboard.get(event.code).press || this.#keyboard.get(event.code).hold) {
+                return;
+            } 
+        }
+
         this.#keyboard.set(event.code, { press: true, hold: false, release: false });
     }
 
+    /**
+     * @param {KeyboardEvent} event 
+     */
     onKeyUp = (event) => {
         this.#keyboard.set(event.code, { press: false, hold: false, release: true })
     }
 
+    /**
+     * @param {MouseEvent} event 
+     */
     onMouseDown = (event) => {
+        if (this.#mouse.has(event.button)) {
+            if(this.#mouse.get(event.button).press || this.#mouse.get(event.button).hold) {
+                return;
+            } 
+        }
+
         this.#mouse.set(event.button, { press: true, hold: false, release: false });
     }
 
+    /**
+     * @param {MouseEvent} event 
+     */
     onMouseUp = (event) => {
         this.#mouse.set(event.button, { press: false, hold: false, release: true })
     }
 
+    /**
+     * @param {WheelEvent} event 
+     */
     onWheel = (event) => {
         if (event.deltaY == 0) return;
         this.#wheel = event.deltaY > 0 ? InputListener.WHEEL_DOWN : InputListener.WHEEL_UP;
@@ -59,10 +88,10 @@ export default class InputListener extends SystemBase {
             return this.#wheel === InputListener.WHEEL_DOWN;
         } else if (code === InputListener.WHEEL_UP) {
             return this.#wheel === InputListener.WHEEL_UP;
-        } else if (typeof code === "string") {
-            return this.#keyboard.get(code)?.press || false;
         } else if (typeof code === "number") {
             return this.#mouse.get(code)?.press || false;
+        } else if (typeof code === "string") {
+            return this.#keyboard.get(code)?.press || false;
         }
     }
 
@@ -71,22 +100,23 @@ export default class InputListener extends SystemBase {
             return this.#wheel === InputListener.WHEEL_DOWN;
         } else if (code === InputListener.WHEEL_UP) {
             return this.#wheel === InputListener.WHEEL_UP;
-        } else if (typeof code === "string") {
-            return this.#keyboard.get(code)?.hold || false;
         } else if (typeof code === "number") {
             return this.#mouse.get(code)?.hold || false;
+        } else if (typeof code === "string") {
+            return this.#keyboard.get(code)?.hold || false;
         }
     }
+
 
     isReleased(code) {
         if (code === InputListener.WHEEL_DOWN) {
             return this.#wheel === InputListener.WHEEL_REST;
         } else if (code === InputListener.WHEEL_UP) {
             return this.#wheel === InputListener.WHEEL_REST;
-        } else if (typeof code === "string") {
-            return this.#keyboard.get(code)?.release || false;
         } else if (typeof code === "number") {
             return this.#mouse.get(code)?.release || false;
+        } else if (typeof code === "string") {
+            return this.#keyboard.get(code)?.release || false;
         }
     }
 

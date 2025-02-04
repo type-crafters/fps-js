@@ -1,4 +1,4 @@
-import { inferType, typecheck } from "@lib/index";
+import { typecheck } from "@lib/index";
 import Player from "@scripts/player/Player";
 
 export default class CharacterController {
@@ -28,7 +28,11 @@ export default class CharacterController {
         this.actions.moveForward.release.subscribe(this.onMoveForwardRelease);
     }
 
-    onInitialize() {
+    onAnimationFrame () {
+        return;
+    }
+
+    onCleanup() {
         this.actions.moveForward.press.unsubscribe(this.onMoveForwardPress);
         this.actions.moveForward.hold.unsubscribe(this.onMoveForwardHold);
         this.actions.moveForward.release.unsubscribe(this.onMoveForwardRelease);

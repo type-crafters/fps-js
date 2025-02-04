@@ -18,12 +18,17 @@ export default class Player extends SystemBase {
     }
 
     onInitialize() {
+        this.input.onInitialize();
         this.controller.onInitialize();
     }
+
     onAnimationFrame() {
+        this.input.onAnimationFrame();
         this.controller.onAnimationFrame();
     }
+    
     onCleanup() {
+        this.input.onCleanup();
         this.controller.onCleanup();
     }
 }

@@ -1,4 +1,4 @@
-import { inferType } from "@lib/index";
+import { typecheck } from "@lib/index";
 import { InputObserver } from "@scripts/input/index";
 
 export default class InputContext {
@@ -33,7 +33,7 @@ export default class InputContext {
     disable() {
         this.#enabled = false;
     }
-    
+
     getBinding() {
         return this.binding;
     }
@@ -42,12 +42,21 @@ export default class InputContext {
         this.binding = binding;
     }
 
+    getCurrent = () => {
+        switch(this.#current) {
+            case this.press: return InputContext.PRESS;
+            case this.hold: return InputContext.HOLD;
+            case this.release: return InputContext.RELEASE;
+            case InputObserver.nil: return InputContext.INACTIVE;
+        }
+    } // TODO remove
+
     setCurrent(observer) {
-        switch(observer) {
+        switch (observer) {
             case InputContext.PRESS:
                 this.#current = this.press;
                 break;
-            case InputContext.HOLD: 
+            case InputContext.HOLD:
                 this.#current = this.hold;
                 break;
             case InputContext.RELEASE:
@@ -56,13 +65,13 @@ export default class InputContext {
             case InputContext.INACTIVE:
                 this.#current = InputObserver.nil;
                 break;
-            default: 
-                throw new TypeError(`Argument of type '${inferType(observer)}' is not assignable to parameter of type 'InputContext.PRESS | InputContext.HOLD | InputContext.RELEASE | InputContext.INACTIVE'`);
+            default:
+                typecheck(observer, String);
         }
     }
 
     onAnimationFrame() {
-        if(this.#enabled) {
+        if (this.#enabled) {
             this.#current.invoke();
         } else {
             console.warn("Action requested using code '" + this.binding + "' was not executed. Action is currently disabled.");

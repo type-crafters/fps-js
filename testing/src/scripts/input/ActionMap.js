@@ -1,5 +1,5 @@
 import AdapterError from "@error/AdapterError";
-import { inferType } from "@lib/index";
+import { inferType, typecheck } from "@lib/index";
 
 export default class ActionMap {
     moveForward;
@@ -67,9 +67,7 @@ export default class ActionMap {
      * @param {string} key
      */
     has(key) {
-        if (typeof key !== "string") {
-            throw new TypeError(`Argument of type '${inferType(key)}' is not assignable to parameter of type 'string'.`);
-        }
+        typecheck(key, String);
         return Object.keys(this).includes(key);
     }
 
